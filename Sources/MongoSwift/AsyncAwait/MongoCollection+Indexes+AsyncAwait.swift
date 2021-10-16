@@ -1,6 +1,4 @@
 #if compiler(>=5.5) && canImport(_Concurrency)
-import NIO
-
 extension MongoCollection {
     /**
      * Creates an index over the collection for the provided keys with the provided options.
@@ -199,5 +197,4 @@ extension MongoCollection {
         try await self.listIndexNames(session: session).get()
     }
 }
-
 #endif

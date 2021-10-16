@@ -1,6 +1,4 @@
 #if compiler(>=5.5) && canImport(_Concurrency)
-import NIO
-
 extension MongoCollection {
     /**
      *   Drops this collection from its parent database.
@@ -46,5 +44,4 @@ extension MongoCollection {
         try await self.renamed(to: newName, options: options, session: session).get()
     }
 }
-
 #endif

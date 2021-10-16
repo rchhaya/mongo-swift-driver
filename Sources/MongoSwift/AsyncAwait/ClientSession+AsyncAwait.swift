@@ -1,6 +1,4 @@
 #if compiler(>=5.5) && canImport(_Concurrency)
-import NIO
-
 extension ClientSession {
     /// Ends this `ClientSession`. Call this method when you are finished using the session. You must ensure that all
     /// operations using this session have completed before calling this. The returned future must be fulfilled before
@@ -67,5 +65,4 @@ extension ClientSession {
         try await self.abortTransaction().get()
     }
 }
-
 #endif

@@ -1,6 +1,4 @@
 #if compiler(>=5.5) && canImport(_Concurrency)
-import NIO
-
 extension MongoCollection {
    /**
      * Finds a single document and deletes it, returning the original.
@@ -93,5 +91,4 @@ extension MongoCollection {
         try await self.findOneAndUpdate(filter: filter, update: update, options: options, session: session).get()
     }
 }
-
 #endif

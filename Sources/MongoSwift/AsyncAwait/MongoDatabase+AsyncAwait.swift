@@ -1,7 +1,5 @@
 #if compiler(>=5.5) && canImport(_Concurrency)
-import NIO
-
-/// Extension to MongoDatabase to support experimental async/await APIs.
+/// Extension to MongoDatabase to support async/await APIs.
 extension MongoDatabase {
     /**
      *   Drops this database.
@@ -349,5 +347,4 @@ extension MongoDatabase {
         ).get()
     }  
 }
-
 #endif

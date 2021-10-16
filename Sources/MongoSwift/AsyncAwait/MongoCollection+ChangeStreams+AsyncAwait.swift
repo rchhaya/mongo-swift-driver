@@ -1,6 +1,4 @@
 #if compiler(>=5.5) && canImport(_Concurrency)
-import NIO
-
 extension MongoCollection {
     /**
      * Starts a `ChangeStream` on a collection. The `CollectionType` will be associated with the `fullDocument`
@@ -110,5 +108,4 @@ extension MongoCollection {
         try await self.watch(pipeline, options: options, session: session, withEventType: EventType.self).get()
     }
 }
-
 #endif

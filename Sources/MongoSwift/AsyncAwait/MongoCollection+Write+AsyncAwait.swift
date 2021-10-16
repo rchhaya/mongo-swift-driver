@@ -1,6 +1,4 @@
 #if compiler(>=5.5) && canImport(_Concurrency)
-import NIO
-
 extension MongoCollection {
     /**
      * Encodes the provided value to BSON and inserts it. If the value is missing an identifier, one will be
@@ -224,5 +222,4 @@ extension MongoCollection {
         try await self.bulkWrite(requests, options: options, session: session).get()
     }
 }
-
 #endif

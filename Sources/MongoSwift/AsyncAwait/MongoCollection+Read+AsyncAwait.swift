@@ -1,6 +1,4 @@
 #if compiler(>=5.5) && canImport(_Concurrency)
-import NIO
-
 extension MongoCollection {
     /**
      * Finds the documents in this collection which match the provided filter.
@@ -161,5 +159,4 @@ extension MongoCollection {
         try await self.distinct(fieldName: fieldName, filter: filter, options: options, session: session).get()
     }
 }
-
 #endif

@@ -1,6 +1,4 @@
 #if compiler(>=5.5) && canImport(_Concurrency)
-import NIO
-
 extension MongoCursor: AsyncSequence, AsyncIteratorProtocol {
     public typealias AsyncIterator = MongoCursor
 
@@ -41,5 +39,4 @@ extension MongoCursor: AsyncSequence, AsyncIteratorProtocol {
         try await self.kill().get()
     }
 }
-
 #endif

@@ -1,6 +1,4 @@
 #if compiler(>=5.5) && canImport(_Concurrency)
-import NIO
-
 extension ChangeStream: AsyncSequence, AsyncIteratorProtocol {
     public typealias AsyncIterator = ChangeStream
 
@@ -39,5 +37,4 @@ extension ChangeStream: AsyncSequence, AsyncIteratorProtocol {
         try await self.kill().get()
     }
 }
-
 #endif
