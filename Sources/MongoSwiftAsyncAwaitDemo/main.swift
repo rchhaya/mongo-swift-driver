@@ -1,8 +1,6 @@
-#if compiler(>=5.4) && $AsyncAwait
-import _Concurrency
+#if compiler(>=5.5) && canImport(_Concurrency)
 import Dispatch
 import MongoSwift
-import _MongoSwiftConcurrency
 import NIO
 
 let elg = MultiThreadedEventLoopGroup(numberOfThreads: 1)
@@ -27,7 +25,7 @@ func main() async throws {
 
 let dg = DispatchGroup()
 dg.enter()
-let task = Task.runDetached {
+let task = Task.detached {
     do {
         try await main()
         print("success!")

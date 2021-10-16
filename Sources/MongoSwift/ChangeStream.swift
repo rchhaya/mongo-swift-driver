@@ -61,7 +61,7 @@ internal let changeStreamNamespaceKey = CodingUserInfoKey(rawValue: "namespace")
 /// A MongoDB change stream.
 /// - SeeAlso: https://docs.mongodb.com/manual/changeStreams/
 public class ChangeStream<T: Codable>: CursorProtocol {
-    internal typealias Element = T
+    public typealias Element = T
 
     /// The client this change stream descended from.
     private let client: MongoClient

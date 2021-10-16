@@ -1,13 +1,8 @@
-#if compiler(>=5.4) && $AsyncAwait
-import _Concurrency
-import MongoSwift
+#if compiler(>=5.5) && canImport(_Concurrency)
 import NIO
-import _NIOConcurrency
 
 extension ChangeStream: AsyncSequence, AsyncIteratorProtocol {
     public typealias AsyncIterator = ChangeStream
-
-    public typealias Element = T
 
     public __consuming func makeAsyncIterator() -> ChangeStream<T> {
         self

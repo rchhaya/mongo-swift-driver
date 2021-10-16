@@ -1,8 +1,5 @@
-#if compiler(>=5.4) && $AsyncAwait
-import _Concurrency
-import MongoSwift
+#if compiler(>=5.5) && canImport(_Concurrency)
 import NIO
-import _NIOConcurrency
 
 extension ClientSession {
     /// Ends this `ClientSession`. Call this method when you are finished using the session. You must ensure that all
