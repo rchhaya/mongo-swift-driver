@@ -9,7 +9,11 @@ extension MongoCursor: AsyncSequence, AsyncIteratorProtocol {
     }
 
     public func next() async throws -> T? {
-        try await self.next().get()
+        if Task.isCancelled {
+            print("task is canceled!")
+            return nil
+        }
+        return try await self.next().get()
     }
 
     /**
@@ -22,10 +26,9 @@ extension MongoCursor: AsyncSequence, AsyncIteratorProtocol {
      * cursor (e.g. the `maxAwaitTimeMS` option on the `FindOptions` passed to `find`).
      *
      * - Returns:
-     *   A `Result<T, Error>?` containing the next `T` in this cursor on success, an error if one occurred, or `nil`
-     *   if there were no results.
+     *   A `T?`, either the next `T` in this cursor on success, or `nil` if there were no results.
      *
-     *   On failure, there error returned is likely one of the following:
+     *   On failure, the error thrown is likely one of the following:
      *     - `MongoError.CommandError` if an error occurs while fetching more results from the server.
      *     - `MongoError.LogicError` if this function is called after the cursor has died.
      *     - `MongoError.LogicError` if this function is called and the session associated with this cursor is inactive.
@@ -33,10 +36,6 @@ extension MongoCursor: AsyncSequence, AsyncIteratorProtocol {
      */
     public func tryNext() async throws -> T? {
         try await self.tryNext().get()
-    }
-
-    public func kill() async throws {
-        try await self.kill().get()
     }
 }
 #endif

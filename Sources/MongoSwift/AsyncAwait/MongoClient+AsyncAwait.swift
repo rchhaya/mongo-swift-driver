@@ -15,10 +15,16 @@ extension MongoClient {
     public func withSession<T>(
         options: ClientSessionOptions? = nil,
         _ sessionBody: (ClientSession) async throws -> T
-    ) async rethrows -> T {
+    ) async throws -> T {
         let session = self.startSession(options: options)
-        // TODO: need to end session after executing
-        return try await sessionBody(session)
+        do {
+            let result = try await sessionBody(session)
+            try? await session.end()
+            return result
+        } catch {
+            try? await session.end()
+            throw error
+        }
     }
 
     /**

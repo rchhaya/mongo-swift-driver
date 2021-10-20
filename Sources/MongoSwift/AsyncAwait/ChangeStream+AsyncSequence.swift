@@ -7,7 +7,10 @@ extension ChangeStream: AsyncSequence, AsyncIteratorProtocol {
     }
 
     public func next() async throws -> T? {
-        try await self.next().get()
+        if Task.isCancelled {
+            return nil
+        }
+        return try await self.next().get()
     }
 
     /**
@@ -31,10 +34,6 @@ extension ChangeStream: AsyncSequence, AsyncIteratorProtocol {
      */
     public func tryNext() async throws -> T? {
         try await self.tryNext().get()
-    }
-
-    public func kill() async throws {
-        try await self.kill().get()
     }
 }
 #endif

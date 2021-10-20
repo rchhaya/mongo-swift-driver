@@ -3,21 +3,35 @@ import Dispatch
 import MongoSwift
 import NIO
 
-let elg = MultiThreadedEventLoopGroup(numberOfThreads: 1)
+let elg = MultiThreadedEventLoopGroup(numberOfThreads: 2)
 defer {
     try? elg.syncShutdownGracefully()
 }
 
 func main() async throws {
     let client = try MongoClient(using: elg)
-    let coll = client.db("asyncTestDB").collection("test")
+    let db = client.db("asyncTestDB")
+    try await db.drop()
 
+    print("created client")
+    let opts = CreateCollectionOptions(capped: true, max: 3, size: 1000)
+    let coll = try await client.db("asyncTestDB").createCollection("test", options: opts)
+    print("created coll")
     let result = try await coll.insertMany([["x": 1], ["x": 2], ["x": 3]])
     print("Inserted IDs: \(result!.insertedIDs)")
 
-    for try await doc in try await coll.find() {
-        print("found document: \(doc)")
+    let cursorTask = Task {
+        let cursor = try await coll.find(options: FindOptions(cursorType: .tailable))
+        while let doc = try await cursor.next() {
+            print("found document: \(doc)")
+        }
+        // for try await doc in try await coll.find(options: FindOptions(cursorType: .tailable)) {
+        //     print("found document: \(doc)")
+        // }
     }
+
+    try await Task.sleep(nanoseconds: 30_000_000_000)
+    cursorTask.cancel()
 
     try await coll.drop()
     try await client.close()

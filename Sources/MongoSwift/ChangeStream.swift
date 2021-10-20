@@ -281,4 +281,18 @@ public class ChangeStream<T: Codable>: CursorProtocol {
             self.wrappedCursor.kill()
         }
     }
+
+// When concurrency is available, we can ensure cursors are always cleaned up properly.
+#if compiler(>=5.5) && canImport(_Concurrency)
+    deinit {
+        let client = self.client
+        let el = self.eventLoop
+        let wrappedCursor = self.wrappedCursor 
+        Task {
+            client.operationExecutor.execute(on: el) {
+                wrappedCursor.kill()
+            }
+        }
+    }
+#endif
 }

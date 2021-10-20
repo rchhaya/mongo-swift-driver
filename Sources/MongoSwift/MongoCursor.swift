@@ -64,6 +64,7 @@ public class MongoCursor<T: Codable>: CursorProtocol {
         session: ClientSession?,
         cursorType: MongoCursorType? = nil
     ) throws {
+        print("initializing mongocursor")
         self.client = client
         self.decoder = decoder
         self.eventLoop = eventLoop
@@ -178,7 +179,8 @@ public class MongoCursor<T: Codable>: CursorProtocol {
      *     - `DecodingError` if an error occurs decoding the server's response.
      */
     public func next() -> EventLoopFuture<T?> {
-        self.client.operationExecutor.execute(on: self.eventLoop) {
+        print("calling future based next method")
+        return self.client.operationExecutor.execute(on: self.eventLoop) {
             try self.decode(result: self.wrappedCursor.next())
         }
     }
@@ -262,4 +264,19 @@ public class MongoCursor<T: Codable>: CursorProtocol {
             self.wrappedCursor.kill()
         }
     }
+
+// When concurrency is available, we can ensure cursors are always cleaned up properly.
+#if compiler(>=5.5) && canImport(_Concurrency)
+    deinit {
+        print("in cursor deinit")
+        let client = self.client
+        let el = self.eventLoop
+        let wrappedCursor = self.wrappedCursor 
+        Task {
+            client.operationExecutor.execute(on: el) {
+                wrappedCursor.kill()
+            }
+        }
+    }
+#endif
 }
