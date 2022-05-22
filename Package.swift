@@ -1,5 +1,9 @@
 // swift-tools-version:5.1
 
+#if os(iOS)
+#error("This library does not support iOS.")
+#else
+
 ///  To avoid breaking Swift 5.1 compatibility, only require newer NIO versions when we need NIO's concurrency APIs.
 func getMinNIOVersion() -> PackageDescription.Package.Dependency.Requirement {
 #if compiler(>=5.5.2) && canImport(_Concurrency)
@@ -50,4 +54,6 @@ package.dependencies += [.package(url: "https://github.com/apple/swift-atomics",
 package.targets += [.target(name: "MongoSwift", dependencies: ["Atomics", "CLibMongoC", "NIO", "NIOConcurrencyHelpers", "SwiftBSON"])]
 #else
 package.targets += [.target(name: "MongoSwift", dependencies: ["CLibMongoC", "NIO", "NIOConcurrencyHelpers", "SwiftBSON"])]
+#endif
+
 #endif
