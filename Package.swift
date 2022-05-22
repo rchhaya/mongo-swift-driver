@@ -13,7 +13,8 @@ import PackageDescription
 let package = Package(
     name: "mongo-swift-driver",
     platforms: [
-        .macOS(.v10_14)
+        .macOS(.v10_14),
+        .iOS("9999.0"),
     ],
     products: [
         .library(name: "MongoSwift", targets: ["MongoSwift"]),
